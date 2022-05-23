@@ -12,6 +12,5 @@ export default async function handler(req, res) {
   const objects = new ListObjectsV2Command({ Bucket: "schuster-videos" });
 
   const data = await s3Client.send(objects);
-  console.log(data);
-  res.status(200).json({ data });
+  res.status(200).json(data);
 }

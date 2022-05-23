@@ -1,19 +1,23 @@
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import styles from "../styles/Home.module.css";
+import MediaList from "../components/MediaList/MediaList";
 
 export default function Home() {
+  const [media, setMedia] = useState({});
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // We're fetching from S3 every single request.
+        // TODO: https://react-query.tanstack.com/overview
         fetch("api/s3")
           .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
+          .then((res) => {
+            setMedia(res.Contents);
           });
       } catch (err) {
-        console.error(err);
+        throw err;
       }
     };
     fetchData();
@@ -29,6 +33,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Welcome to my video app</h1>
+        <MediaList items={media} />
       </main>
 
       <footer className={styles.footer}>
